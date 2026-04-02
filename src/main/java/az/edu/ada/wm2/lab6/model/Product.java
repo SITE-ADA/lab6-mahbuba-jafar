@@ -1,16 +1,23 @@
 package az.edu.ada.wm2.lab6.model;
 
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "products")
 public class Product {
+
+    @Id
     private UUID id;
+
     private String productName;
     private BigDecimal price;
     private LocalDate expirationDate;
 
-    // Constructors
     public Product() {
     }
 
@@ -28,7 +35,6 @@ public class Product {
         this.expirationDate = expirationDate;
     }
 
-    // Getters and Setters
     public UUID getId() {
         return id;
     }
@@ -61,6 +67,13 @@ public class Product {
         this.expirationDate = expirationDate;
     }
 
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
     @Override
     public String toString() {
         return "Product{" +
@@ -70,4 +83,11 @@ public class Product {
                 ", expirationDate=" + expirationDate +
                 '}';
     }
+    @ManyToMany
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
 }
